@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 
@@ -15,7 +17,8 @@ public class ManyMessagesTrigger
 	}
 
 	[Function("ManyMessagesTrigger")]
-	public void Run([QueueTrigger(ManyMessagesQueueName)] string myQueueItem,
+	[QueueOutput(ManyMessagesTrigger.ManyMessagesQueueName)]
+	public IEnumerable<string> Run([QueueTrigger(ManyMessagesQueueName)] string myQueueItem,
 		FunctionContext context)
 	{
 		_logger.LogInformation("Queue item received:{QueueItem}", myQueueItem);
@@ -25,5 +28,19 @@ public class ManyMessagesTrigger
 			throw new ArgumentException("Not an integer");
 		}
 
+		switch (value)
+		{
+			case > 21:  // throw an exception if the value is greater than 21
+				throw new IndexOutOfRangeException("Number is too high!");
+			case 10: // if the value is exactly 10, send two more messages.
+			{
+				List<string> messages = new();
+				messages.AddRange(Enumerable.Range(11, 2).Select(i => (value + i).ToString()));
+				return messages;
+			}
+			default:
+				// This is the end.  There is no message here, and nothing will be enqueued.
+				return null;
+		}
 	}
 }

@@ -30,7 +30,7 @@ public class DemoHttpTrigger
 		
 		response.WriteString(responseString);
 
-		List<string> messages = new List<string>();
+		List<string> messages = new();
 		messages.AddRange(Enumerable.Range(1,10).Select(i => i.ToString()));
 		
 		return messages;

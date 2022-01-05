@@ -29,6 +29,7 @@ namespace SkuVault.DemoApp
 				.ConfigureFunctionsWorkerDefaults(builder =>
 				{
 					builder.UseMiddleware<LoggingMiddleware>();
+					builder.UseMiddleware<ExceptionLoggingMiddleware>();
 				})
 				.Build();
 
