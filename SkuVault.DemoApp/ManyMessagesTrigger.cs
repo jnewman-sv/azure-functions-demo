@@ -27,7 +27,6 @@ public class ManyMessagesTrigger
 		{
 			throw new ArgumentException("Not an integer");
 		}
-
 		switch (value)
 		{
 			case > 21:  // throw an exception if the value is greater than 21
