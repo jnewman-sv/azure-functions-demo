@@ -21,8 +21,8 @@ public class LoggingMiddleware:IFunctionsWorkerMiddleware
 	{
 		_logger.BeginScope(new { timeStamp = DateTime.UtcNow.ToTimestamp() });
 		// ReSharper disable once TemplateIsNotCompileTimeConstantProblem
-		_logger.LogInformation($"Entering function: {context.FunctionDefinition.Name}-{context.FunctionDefinition.Id}");
+		_logger.LogInformation("Entering function: {Name}-{Id}",context.FunctionDefinition.Name,context.FunctionDefinition.Id);
 		await next(context);
-		_logger.LogInformation($"Function: {context.FunctionDefinition.Name}-{context.FunctionDefinition.Id} ... completed");
+		_logger.LogInformation("Function: {Name}-{Id} ... completed",context.FunctionDefinition.Name,context.FunctionDefinition.Id);
 	}
 }
