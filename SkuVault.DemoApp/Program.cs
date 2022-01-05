@@ -4,6 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Azure.Functions.Worker.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using Serilog.Core;
+using Serilog.Events;
+using Serilog.Formatting.Json;
 using SkuVault.DemoApp.Middleware;
 
 namespace SkuVault.DemoApp
@@ -13,14 +17,19 @@ namespace SkuVault.DemoApp
 		public static void Main()
 		{
 			var host = new HostBuilder()
-				/*.ConfigureServices((context, collection) =>
+				.ConfigureServices((context, collection) =>
 				{
-					collection.AddLogging();
+					// Registering Serilog provider
+					Logger logger = new LoggerConfiguration()
+						.WriteTo.Console(new JsonFormatter())
+						.WriteTo.Debug(new JsonFormatter())
+						.CreateLogger();
+					collection.AddLogging(lb => lb.AddSerilog(logger));
 				})
 				.ConfigureFunctionsWorkerDefaults(builder =>
 				{
 					builder.UseMiddleware<LoggingMiddleware>();
-				})*/
+				})
 				.Build();
 
 			host.Run();
